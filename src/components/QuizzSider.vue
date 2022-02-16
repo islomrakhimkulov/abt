@@ -16,16 +16,19 @@
            <h2>Matematika</h2>
         </div>
         <div class="quizz-sider__total">
-          <p>7/{{quizzes.length }}</p>
-          
+          <div>{{ filteredAnswers }}</div> /
+          <div>
+            {{ quizzes.length }}
+          </div>
         </div>
       </div>
       
-      <div v-for="quizz in quizzes" :key="quizz.id">
-        <div class="quizz-sider__items" >
-          {{ quizz.id }}
-          <p>{{ quizz.userAnswer }}</p>
-        </div>
+      <div class="quizz-sider__wrapper">
+        <div class="quizz-sider__items"
+             v-for="quizz in quizzes" :key="quizz.id" 
+             :class="{'quizz-sider__items--reply': quizz.userAnswer }">
+            {{ quizz.id }} 
+          </div>
       </div>
       
     </div>
@@ -49,9 +52,12 @@ export default {
     }
   },
   data: () => ({
-    quizzes: [],
-    userAnswer: null,
   }),
+  computed: {
+    filteredAnswers() {
+      return this.quizzes.filter(item => item.userAnswer).length;
+    }
+  },
   methods: {
     toggleSider() {
       this.$emit("input", !this.value);
@@ -59,7 +65,6 @@ export default {
   },
 };
 </script>
-
 <style lang="scss">
 @import "@/assets/quizz.scss";
 .quizz-sider {
@@ -87,11 +92,22 @@ export default {
     }
   }
   &__items {
-    display: flex;
-    flex-direction: columns;
+    border: 1px solid;
     border-radius: 50%;
-    padding: 4px;
-    margin-right: 15px;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 9px;
+    margin: 0 5px;
+  }
+  &__items--reply {
+    background-color: #36312c;
+    color: #fff;
+    border:  1px solid #36312c;
+  }
+  &__wrapper {
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
   }
   &__content {
     display: flex;
@@ -102,9 +118,11 @@ export default {
     margin-left: 10px;
   }
   &__total {
+    display: flex;
     margin-right: 10px;
     font-weight: bolder;
   }
 }
 
 </style>
+

@@ -11,11 +11,15 @@
           @user-answer-change="handleUserAnswerChange"
         />
       </div>
+      <div class="quizz__modal-content" v-if="openModal">
+        <button @click="finishTest" class="quizz__button">Testni yakunlash</button>
+      </div>
     </main>
     <QuizzSider
        :quizzes="quizzes"
        v-model="isSiderOpen"
     />
+    
   </div>
 </template>
 
@@ -34,7 +38,7 @@ export default {
           question: "Quyidagi ko'paytmalardan qaysi biri 45 ga qoldiqsiz bo'linadi?",
           options: ["39⋅18", "234⋅80", "35⋅61", "80⋅23"],
           correctAnswer: "234⋅80",
-          userAnswer: "39⋅18",
+          // userAnswer: "39⋅18",
         },
         {
           id: 2,
@@ -102,6 +106,11 @@ export default {
       ],
     };
   },
+  computed: {
+    openModal() {
+      return this.quizzes.filter(item => item.userAnswer).length >= this.quizzes.length ;
+    }
+  }, 
   methods: {
     handleUserAnswerChange(data) {
       this.quizzes = this.quizzes.map((quizz) => {
@@ -112,6 +121,10 @@ export default {
         }
       });
     },
+    finishTest() {
+      console.log('sayHi')
+      this.quizzes.userAnswer = '';
+    }
   },
 };
 </script>
@@ -139,5 +152,21 @@ export default {
     width: 80%;
     margin: 0 auto;
   }
+  &__modal-content {
+      
+      width: 100%;
+      padding: 100px 0;
+      text-align: center;
+      background: #333;
+    }
+    &__button {
+      text-align: center;
+      background: green;
+      padding: 10px 15px;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
 }
 </style>
